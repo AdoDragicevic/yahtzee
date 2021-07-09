@@ -1,0 +1,17 @@
+.Game {
+    padding: 2rem;
+}
+
+.Game-title {
+    
+}
+
+.Game-dices {
+    margin: 1.5rem 0;
+}
+
+.Game-btn {
+    border-radius: 5px;
+    padding: .3rem .8rem;
+    font-size: 1rem;
+}
