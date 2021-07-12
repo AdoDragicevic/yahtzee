@@ -20,7 +20,7 @@ class Game extends Component {
         rules: [ ...rules ]
     };
 
-    reroll = () => {
+    roll = () => {
         const { dices, locked } = this.state;
         const newDices = dices.map( (d, i) => locked[i] ? d : getRandEl(this.props.diceNames) );
         this.setState(st => ({ dices: newDices, rollsRemaining: --st.rollsRemaining, isRolling: true }));
@@ -38,17 +38,19 @@ class Game extends Component {
         return msg[this.state.rollsRemaining];
     };
 
-    updateScore = name => {
+    updateScore = (oldRule) => {
         const rls = [ ...this.state.rules ];
-        const rule = rls.find( r => r.name === name );
-        rule.calc(this.state.dices);
+        const newRule = rls.find( r => r.name === oldRule.name );
+        newRule.calc(this.state.dices);
         this.setState({ rules: rls });
     };
 
     renderRules = (start, end = rules.length) => {
         const ruleList = [];
         for(let i = start-1; i < end; i++) {
-            ruleList.push( <Rule rule={rules[i]} key={i} updateScore={this.updateScore} /> );
+            ruleList.push( 
+                <Rule rule={rules[i]} key={i} updateScore={this.updateScore} /> 
+            );
         };
         return ruleList;
     };
@@ -73,7 +75,7 @@ class Game extends Component {
                     <button 
                         className="Game-btn"
                         disabled={this.state.isRolling || this.state.rollsRemaining < 1}
-                        onClick={this.reroll}
+                        onClick={this.roll}
                     >
                         {this.state.isRolling ? "Rolling..." : this.getBtnTxt()}
                     </button>

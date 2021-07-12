@@ -9,10 +9,8 @@ class Rule {
     };
 
     sumSame(vals) {
-        
-        const v = (vals.filter( num => num === this.defaultVal )).length * this.defaultVal;
-        console.log( (vals.filter( num => num === this.defaultVal )).length ) ;
-        return  v;
+        console.log(vals);
+        this.score = (vals.filter(v => v === this.defaultVal)).length * this.defaultVal; 
     };
 
     sumAll(vals) {
