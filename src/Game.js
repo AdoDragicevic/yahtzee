@@ -1,6 +1,5 @@
 import { Component } from "react";
 import "./Game.css";
-import { getRandEl } from "./helper";
 import Dice from "./Dice";
 import Rule from "./Rule";
 import rules from "./rules";
@@ -9,28 +8,28 @@ class Game extends Component {
 
     static defaultProps = {
         diceNames: ["one", "two", "three", "four", "five", "six"],
-        numOfDices: 5
+        nOfDices: 5
     };
 
     state = {
-        dices: this.props.diceNames.slice(0, this.props.numOfDices),
-        locked: Array(this.props.numOfDices).fill(false),
+        dices: [1, 2, 3, 4, 5],
+        locked: Array(this.props.nOfDices).fill(false),
         rollsRemaining: 2,
         isRolling: false,
-        rules: [ ...rules ]
+        rules: [...rules]
     };
 
     roll = () => {
         const { dices, locked } = this.state;
-        const newDices = dices.map( (d, i) => locked[i] ? d : getRandEl(this.props.diceNames) );
-        this.setState(st => ({ dices: newDices, rollsRemaining: --st.rollsRemaining, isRolling: true }));
-        setTimeout(() => this.setState({ isRolling: false }) , 1000);
+        const dcs = dices.map( (d, i) => locked[i] ? d : Math.floor(Math.random() * this.props.diceNames.length));
+        this.setState(st => ({ dices: dcs, isRolling: true, rollsRemaining: --st.rollsRemaining }));
+        setTimeout( () => this.setState({ isRolling: false }), 1000 );
     };
 
     lock = indx => {
-        const newLocked = [ ...this.state.locked ];
-        newLocked[indx] = !newLocked[indx];
-        this.setState({ locked: newLocked });
+        const lck = [ ...this.state.locked ];
+        lck[indx] = !lck[indx];
+        this.setState({ locked: lck });
     };
 
     getBtnTxt() {
@@ -70,7 +69,15 @@ class Game extends Component {
                 <header className="Game-header">
                     <h1 className="Game-title"> Yahtzee! </h1>
                     <div className="Game-dices">
-                        {this.state.dices.map( (d,i) => <Dice key={i} indx={i} val={d} lock={this.lock} />)}
+                        {this.state.dices.map( (d,i) => (
+                            <Dice 
+                                key={i} 
+                                indx={i} 
+                                val={d} 
+                                name={this.props.diceNames[d]} 
+                                lock={this.lock} 
+                            />
+                        ))}
                     </div>
                     <button 
                         className="Game-btn"

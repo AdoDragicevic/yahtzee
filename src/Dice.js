@@ -8,8 +8,8 @@ class Dice extends Component {
     };
 
     render() {
-        const { val } = this.props;
-        return <i className={`Dice fas fa-dice-${val}`} onClick={this.handleClick}></i>
+        const { name } = this.props;
+        return <i className={`Dice fas fa-dice-${name}`} onClick={this.handleClick}></i>
     };
 
 };
