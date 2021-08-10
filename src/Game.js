@@ -75,6 +75,9 @@ class Game extends Component {
         const { dices, isRolling, rollsRemaining, locked, rotation } = this.state;
         return (
             <div className="Game">
+                <nav className="Game__nav">
+                    <button className="Game__nav-btn">&#9432;</button>
+                </nav>
                 <header className="Game__header">
                     <h1 className="Game__title"> Yahtzee! </h1>
                     <div className="Game__dices">

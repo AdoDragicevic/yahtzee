@@ -7,6 +7,7 @@
     background-color: #C3A86D;
     padding: 1vh 2vw;
     box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    position: relative;
 }
 
 @media screen and (max-width: 530px) {
@@ -14,6 +15,30 @@
         border: none;
         padding: 2rem;
     }
+}
+
+.Game__nav {
+    position: absolute;
+    top: -1px;
+    right: -1px;
+}
+
+.Game__nav-btn {
+    background-color: transparent;
+    border-radius: 1px;
+    height: 35px;
+    width: 35px;
+    font-size: 1.2rem;
+    color: rgb(131, 109, 52);
+    border: 1px solid hsl(43, 43%, 36%);
+    outline: none;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.Game__nav-btn:hover {
+    background-color: rgb(131, 109, 52);
+    color: #eee;
 }
 
 .Game__header {
