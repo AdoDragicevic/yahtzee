@@ -6,102 +6,113 @@ import rules from "./rules";
 
 class Game extends Component {
 
-    static defaultProps = {
-        diceNames: ["one", "two", "three", "four", "five", "six"],
-        nOfDices: 5
-    };
+    static defaultProps = { nOfDices: 5 };
 
     state = {
-        dices: [1, 2, 3, 4, 5],
+        dices: Array(this.props.nOfDices).fill(1),
         locked: Array(this.props.nOfDices).fill(false),
-        rollsRemaining: 2,
+        diceRotation: Array(this.props.nOfDices).fill(0),
+        rollsRemaining: 3,
         isRolling: false,
         rules: [...rules]
     };
 
+    componentDidMount() {
+        this.roll();
+    };
+
     roll = () => {
-        const { dices, locked } = this.state;
-        const dcs = dices.map( (d, i) => locked[i] ? d : Math.floor(Math.random() * this.props.diceNames.length));
-        this.setState(st => ({ dices: dcs, isRolling: true, rollsRemaining: --st.rollsRemaining }));
-        setTimeout( () => this.setState({ isRolling: false }), 1000 );
+        const { dices, locked, diceRotation, rollsRemaining } = this.state;
+        const dcs = dices.map( (d, i) => locked[i] ? d : Math.floor(Math.random() * dices.length + 1));
+        const rot = diceRotation.map( (r, i) => locked[i] ? r : Math.random() * (Math.random() < .5 ? - 10 : 10));
+        this.setState({ dices: dcs, diceRotation: rot, isRolling: true, rollsRemaining: rollsRemaining - 1 });
+        setTimeout( () => this.setState({ isRolling: false }), 500 );
     };
 
     lock = indx => {
-        const lck = [ ...this.state.locked ];
-        lck[indx] = !lck[indx];
-        this.setState({ locked: lck });
+        const locked = [ ...this.state.locked ];
+        locked[indx] = !locked[indx];
+        this.setState({ locked });
     };
 
-    getBtnTxt() {
+    getBtnTxt = () => {
+        const { isRolling, rollsRemaining } = this.state;
+        if (isRolling && rollsRemaining >= 2) return "Starting round...";
+        if (isRolling) return "Rolling...";
         const msg = ["0 Rolls Remaining", "1 Roll Remaining", "2 Rolls Remaining"];
-        return msg[this.state.rollsRemaining];
+        return msg[rollsRemaining];
     };
 
-    updateScore = (oldRule) => {
-        const rls = [ ...this.state.rules ];
-        const newRule = rls.find( r => r.name === oldRule.name );
-        newRule.calc(this.state.dices);
-        this.setState({ rules: rls });
+    updateScore = rule => {
+        const rules = [ ...this.state.rules ];
+        const curr = rules.find( r => r.name === rule.name);
+        curr.score = curr.calc(this.state.dices);
+        const locked = this.state.locked.map( el => el = false);
+        this.setState({ rules, locked, rollsRemaining: 3 }, this.roll);
     };
 
-    renderRules = (start, end = rules.length) => {
+    renderRules = (start = 0, end = rules.length) => {
         const ruleList = [];
-        for(let i = start-1; i < end; i++) {
-            ruleList.push( 
-                <Rule rule={rules[i]} key={i} updateScore={this.updateScore} /> 
+        for(let i = start; i < end; i++) {
+            const disabled = rules[i].score !== null;
+            ruleList.push(
+                <Rule 
+                    rule={rules[i]} 
+                    key={i}
+                    isDisabled={disabled}
+                    updateScore={this.updateScore} 
+                /> 
             );
         };
         return ruleList;
     };
 
     sumScores() {
-        let sum = 0;
-        for(let rule of rules) {
-            const score = rule.score || 0;
-            sum += score;
-        } 
-        return sum;
+        return this.state.rules.reduce( (acc, curr) => acc += (curr.score ? curr.score : 0), 0);
     };
 
     render() {
+        const { dices, isRolling, rollsRemaining, locked, diceRotation } = this.state;
         return (
             <div className="Game">
-                <header className="Game-header">
-                    <h1 className="Game-title"> Yahtzee! </h1>
-                    <div className="Game-dices">
-                        {this.state.dices.map( (d,i) => (
+                <header className="Game__header">
+                    <h1 className="Game__title"> Yahtzee! </h1>
+                    <div className="Game__dices">
+                        {dices.map( (d,i) => (
                             <Dice 
-                                key={i} 
+                                key={i}
                                 indx={i} 
-                                val={d} 
-                                name={this.props.diceNames[d]} 
-                                lock={this.lock} 
+                                val={d}
+                                isLocked={locked[i] ? true : false}
+                                isRolling={isRolling}
+                                rotation={`${diceRotation[i]}deg`}
+                                lock={this.lock}
                             />
                         ))}
                     </div>
                     <button 
-                        className="Game-btn"
-                        disabled={this.state.isRolling || this.state.rollsRemaining < 1}
+                        className="Game__btn"
+                        disabled={isRolling || rollsRemaining < 1}
                         onClick={this.roll}
                     >
-                        {this.state.isRolling ? "Rolling..." : this.getBtnTxt()}
+                        {this.getBtnTxt()}
                     </button>
                 </header>
-                <main className="Game-scores">
-                    <article className="Game-scores-box">
-                        <h2 className="Game-socres-header">Upper</h2>
-                        <ul className="Game-scores-list">
-                            {this.renderRules(1, 6)}
+                <main className="Game__scores">
+                    <article className="Game__scores-box">
+                        <h2 className="Game__scores-header">Upper</h2>
+                        <ul className="Game__scores-list">
+                            {this.renderRules(0, 6)}
                         </ul>
                     </article>
-                    <article className="Game-scores-box">
-                        <h2 className="Game-scores-header">Lower</h2>
-                        <ul className="Game-scores-list">
-                            {this.renderRules(7)}
+                    <article className="Game__scores-box">
+                        <h2 className="Game__scores-header">Lower</h2>
+                        <ul className="Game__scores-list">
+                            {this.renderRules(6)}
                         </ul>
                     </article>
-                    <article className="Game-scores-box">
-                        <h2>Total: {this.sumScores()}</h2>
+                    <article className="Game__scores-box">
+                        <h2 className="Game__scores-header">Total: {this.sumScores()}</h2>
                     </article>
                 </main>
             </div>

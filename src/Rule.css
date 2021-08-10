@@ -1,0 +1,21 @@
+.Rule {
+    cursor: pointer;
+    border-bottom: 1px solid #836C34;
+    margin-bottom: 4px;
+    padding-bottom: 3px;
+    padding-top: 1px;
+    color: hsl(238, 35%, 19%);
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;   
+}
+
+.Rule--disabled {
+    cursor: not-allowed;
+    opacity: .5;
+}
+
+.Rule--crossed {
+    text-decoration: line-through;
+    opacity: .5;
+}
