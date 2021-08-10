@@ -11,7 +11,7 @@ class Game extends Component {
     state = {
         dices: Array(this.props.nOfDices).fill(1),
         locked: Array(this.props.nOfDices).fill(false),
-        diceRotation: Array(this.props.nOfDices).fill(0),
+        rotation: Array(this.props.nOfDices).fill(0),
         rollsRemaining: 3,
         isRolling: false,
         rules: [...rules]
@@ -22,10 +22,10 @@ class Game extends Component {
     };
 
     roll = () => {
-        const { dices, locked, diceRotation, rollsRemaining } = this.state;
+        const { dices, locked, rotation, rollsRemaining } = this.state;
         const dcs = dices.map( (d, i) => locked[i] ? d : Math.floor(Math.random() * dices.length + 1));
-        const rot = diceRotation.map( (r, i) => locked[i] ? r : Math.random() * (Math.random() < .5 ? - 10 : 10));
-        this.setState({ dices: dcs, diceRotation: rot, isRolling: true, rollsRemaining: rollsRemaining - 1 });
+        const rot = rotation.map( (r, i) => locked[i] ? r : Math.random() * (Math.random() < .5 ? - 10 : 10));
+        this.setState({ dices: dcs, rotation: rot, isRolling: true, rollsRemaining: rollsRemaining - 1 });
         setTimeout( () => this.setState({ isRolling: false }), 500 );
     };
 
@@ -72,7 +72,7 @@ class Game extends Component {
     };
 
     render() {
-        const { dices, isRolling, rollsRemaining, locked, diceRotation } = this.state;
+        const { dices, isRolling, rollsRemaining, locked, rotation } = this.state;
         return (
             <div className="Game">
                 <header className="Game__header">
@@ -85,7 +85,7 @@ class Game extends Component {
                                 val={d}
                                 isLocked={locked[i] ? true : false}
                                 isRolling={isRolling}
-                                rotation={`${diceRotation[i]}deg`}
+                                rotation={`${rotation[i]}deg`}
                                 lock={this.lock}
                             />
                         ))}
