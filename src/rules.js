@@ -21,13 +21,13 @@ class Rule {
         return 50;
     };
 
-    frequencyCounter(vals) {
+    frequencyCounter = vals => {
         const f = {};
         vals.forEach( v => f[v] = (f[v] || 0) +1 );
         return f;
     };
 
-    sumFrequency(location, freq) {
+    sumFrequency = (location, freq) => {
         for (let key in location) {
             if (location[key] === freq) return parseInt(key) * location[key];
         }
@@ -52,7 +52,7 @@ class Rule {
 
     smStraight(vals) {
         let v = new Set(vals);
-        return v.length > 3 && (v.has(1,2,3,4) || v.has(2,3,4,5) || v.has(3,4,5,6)) ? 30 : 0;
+        return v.size > 3 && (v.has(1,2,3,4) || v.has(2,3,4,5) || v.has(3,4,5,6)) ? 30 : 0;
     };
 
     lgStraight(vals) {

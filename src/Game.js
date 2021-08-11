@@ -45,7 +45,6 @@ class Game extends Component {
         const curr = rules.find( r => r.name === rule.name);
         curr.score = curr.calc(this.state.dices);
         const locked = this.state.locked.map( el => el = false);
-        console.log(rules);
         this.setState({ rules, locked, rollsRemaining: 3 }, this.roll);
     };
 

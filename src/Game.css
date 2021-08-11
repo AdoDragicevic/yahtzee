@@ -118,7 +118,7 @@
 
 @media screen and (max-height: 750px) {
     .Game {
-        height: 100vh;
+        min-height: 100vh;
     }
     .Game__scores-header:not(:last-child) {
         display: none;
