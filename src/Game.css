@@ -10,35 +10,33 @@
     position: relative;
 }
 
-@media screen and (max-width: 530px) {
-    .Game {
-        border: none;
-        padding: 2rem;
-    }
-}
-
-.Game__nav {
+.Game__reset-btn {
     position: absolute;
     top: -1px;
-    right: -1px;
-}
-
-.Game__nav-btn {
+    right: 0;
     background-color: transparent;
     border-radius: 1px;
     height: 35px;
-    width: 35px;
-    font-size: 1.2rem;
-    color: rgb(131, 109, 52);
-    border: 1px solid hsl(43, 43%, 36%);
+    width: 55px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-family: inherit;
+    border: 1px solid rgb(131, 109, 52);
     outline: none;
     cursor: pointer;
     transition: .5s;
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px;
+    background-color: transparent;
+    
+    color: #eee;
 }
 
-.Game__nav-btn:hover {
+.Game__reset-btn:hover {
     background-color: rgb(131, 109, 52);
-    color: #eee;
+}
+
+.Game__reset-btn:active {
+    transform: translateY(2px);
 }
 
 .Game__header {
@@ -109,17 +107,12 @@
     list-style: none;
 }
 
-@media screen and (min-height: 750px) {
+@media screen and (max-height: 750px) {
     .Game {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-    }
-}
-
-@media screen and (max-height: 750px) {
-    .Game {
         height: 100vh;
     }
     .Game__scores-header:not(:last-child) {
@@ -146,5 +139,12 @@
     }
     .Game__scores-header:last-child {
         margin-top: 2vh;
+    }
+}
+
+@media screen and (max-width: 530px) {
+    .Game {
+        border: none;
+        padding: 2rem;
     }
 }

@@ -2,11 +2,8 @@ import { Component } from "react";
 import "./Game.css";
 import Dice from "./Dice";
 import Rule from "./Rule";
-import rules from "./rules";
 
 class Game extends Component {
-
-    static defaultProps = { nOfDices: 5 };
 
     state = {
         dices: Array(this.props.nOfDices).fill(1),
@@ -14,7 +11,7 @@ class Game extends Component {
         rotation: Array(this.props.nOfDices).fill(0),
         rollsRemaining: 3,
         isRolling: false,
-        rules: [...rules]
+        rules: this.props.rules.map( r => ({...r}))
     };
 
     componentDidMount() {
@@ -44,20 +41,21 @@ class Game extends Component {
     };
 
     updateScore = rule => {
-        const rules = [ ...this.state.rules ];
+        const rules = this.state.rules.map( r => ({...r}));
         const curr = rules.find( r => r.name === rule.name);
         curr.score = curr.calc(this.state.dices);
         const locked = this.state.locked.map( el => el = false);
+        console.log(rules);
         this.setState({ rules, locked, rollsRemaining: 3 }, this.roll);
     };
 
-    renderRules = (start = 0, end = rules.length) => {
+    renderRules = (start = 0, end = this.state.rules.length) => {
         const ruleList = [];
         for(let i = start; i < end; i++) {
-            const disabled = rules[i].score !== null;
+            const disabled = this.state.rules[i].score !== null;
             ruleList.push(
                 <Rule 
-                    rule={rules[i]} 
+                    rule={this.state.rules[i]} 
                     key={i}
                     isDisabled={disabled}
                     updateScore={this.updateScore} 
@@ -71,13 +69,27 @@ class Game extends Component {
         return this.state.rules.reduce( (acc, curr) => acc += (curr.score ? curr.score : 0), 0);
     };
 
+    reset = () => {
+        this.setState({
+            dices: Array(this.props.nOfDices).fill(1),
+            locked: Array(this.props.nOfDices).fill(false),
+            rotation: Array(this.props.nOfDices).fill(0),
+            rollsRemaining: 3,
+            isRolling: false,
+            rules: this.props.rules.map( r => ({...r}))
+        }, this.roll);
+    };
+
     render() {
         const { dices, isRolling, rollsRemaining, locked, rotation } = this.state;
         return (
             <div className="Game">
-                <nav className="Game__nav">
-                    <button className="Game__nav-btn">&#9432;</button>
-                </nav>
+                <button 
+                    className="Game__reset-btn"
+                    onClick={this.reset}
+                >
+                    Reset
+                </button>
                 <header className="Game__header">
                     <h1 className="Game__title"> Yahtzee! </h1>
                     <div className="Game__dices">

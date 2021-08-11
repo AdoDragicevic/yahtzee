@@ -17,8 +17,8 @@ class Rule {
     };
     
     yahtzee(vals) {
-        const v = new Set(vals);
-        return v.size > 1 ? 0 : 50;
+        for (let v of vals) if (v !== vals[0]) return 0;
+        return 50;
     };
 
     frequencyCounter(vals) {
