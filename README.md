@@ -11,8 +11,9 @@
 * Pick how you want to assing the dice values to your score card
 * Get the highest score
 * Reset game
+* Responsive design
 
 ### Using
 * React.js
 * Vanilla JS (ES6)
-* CSS3
+* CSS3 (BEM)
