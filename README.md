@@ -3,7 +3,7 @@
 ## Play a game of Yahtzee! :game_die:
 
 ### Visit it on Nelify
-
+https://hardcore-cray-3db01e.netlify.app/
 
 ### Functionalities
 * Roll dices up to three times per round
