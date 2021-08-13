@@ -31,7 +31,7 @@ class Game extends Component {
     };
 
     getRandDiceNum() {
-        return Math.floor(Math.random() * 6) +1 );
+        return Math.floor(Math.random() * 6) +1;
     };
 
     lock = indx => {
