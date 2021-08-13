@@ -20,10 +20,18 @@ class Game extends Component {
 
     roll = () => {
         const { dices, locked, rotation, rollsRemaining } = this.state;
-        const dcs = dices.map( (d, i) => locked[i] ? d : ( Math.floor(Math.random() * 6) +1 ) );
-        const rot = rotation.map( (r, i) => locked[i] ? r : Math.random() * (Math.random() < .5 ? - 10 : 10));
+        const dcs = dices.map( (d, i) => locked[i] ? d : this.getRandDiceNum());
+        const rot = rotation.map( (rotation, i) => locked[i] ? rotation : this.getRandRotation());
         this.setState({ dices: dcs, rotation: rot, isRolling: true, rollsRemaining: rollsRemaining - 1 });
         setTimeout( () => this.setState({ isRolling: false }), 500 );
+    };
+
+    getRandRotation() {
+        return Math.random() * (Math.random() < .5 ? - 10 : 10);
+    };
+
+    getRandDiceNum() {
+        return Math.floor(Math.random() * 6) +1 );
     };
 
     lock = indx => {
