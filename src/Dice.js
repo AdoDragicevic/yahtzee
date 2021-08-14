@@ -14,7 +14,7 @@ class Dice extends Component {
             <div 
                 className={classes}
                 style={{ transform: `rotate(${rotation})`}} 
-                onClick={this.handleClick}
+                onClick={this.props.lock ? this.handleClick : null}
             >
                 <span className="Dot top left" hidden={val !== 2 && val !== 3 && val !== 4 && val !== 5 && val !== 6}></span>
                 <span className="Dot top center" hidden={val !== 6}></span>

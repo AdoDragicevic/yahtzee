@@ -11,7 +11,9 @@ class Game extends Component {
         rotation: Array(this.props.nOfDices).fill(0),
         rollsRemaining: 3,
         isRolling: false,
-        rules: this.props.rules.map( r => ({...r}))
+        rules: this.props.rules.map( r => ({...r})),
+        score: 0,
+        bestScore: window.localStorage.getItem("bestScore") || "0"
     };
 
     componentDidMount() {
@@ -41,7 +43,8 @@ class Game extends Component {
     };
 
     getBtnTxt = () => {
-        const { isRolling, rollsRemaining } = this.state;
+        const { isRolling, rollsRemaining, rules } = this.state;
+        if (this.isGameOver(rules)) return "Game over";
         if (isRolling && rollsRemaining >= 2) return "Starting round...";
         if (isRolling) return "Rolling...";
         const msg = ["0 Rolls Remaining", "1 Roll Remaining", "2 Rolls Remaining"];
@@ -53,7 +56,8 @@ class Game extends Component {
         const curr = rules.find( r => r.name === rule.name);
         curr.score = curr.calc(this.state.dices);
         const locked = this.state.locked.map( el => el = false);
-        this.setState({ rules, locked, rollsRemaining: 3 }, this.roll);
+        const score = this.sumScores(rules);
+        this.setState({ rules, locked, rollsRemaining: 3, score }, this.roll);
     };
 
     renderRules = (start = 0, end = this.state.rules.length) => {
@@ -72,27 +76,48 @@ class Game extends Component {
         return ruleList;
     };
 
-    sumScores() {
-        return this.state.rules.reduce( (acc, curr) => acc += (curr.score ? curr.score : 0), 0);
+    sumScores(rules) {
+        return rules.reduce( (acc, curr) => acc += (curr.score ? curr.score : 0), 0);
     };
 
     reset = () => {
+        const { score, bestScore } = this.state;
+        const newBestScore = this.getBestScore(score, bestScore);
         this.setState({
             dices: Array(this.props.nOfDices).fill(1),
             locked: Array(this.props.nOfDices).fill(false),
             rotation: Array(this.props.nOfDices).fill(0),
             rollsRemaining: 3,
             isRolling: false,
-            rules: this.props.rules.map( r => ({...r}))
+            rules: this.props.rules.map( r => ({...r})),
+            score: 0,
+            bestScore: newBestScore
         }, this.roll);
     };
 
+    getBestScore(score, bestScore) {
+        if (score > bestScore) {
+            window.localStorage.setItem("bestScore", score);
+            return score;
+        }
+        return bestScore;
+    };
+
+    isGameOver(rules) {
+        for (let r of rules) {
+            if (r.score === null) return false;
+        }
+        return true;
+    };
+
     render() {
-        const { dices, isRolling, rollsRemaining, locked, rotation } = this.state;
+        const { dices, isRolling, rollsRemaining, locked, rotation, rules, score, bestScore } = this.state;
+        const isGameOver = this.isGameOver(rules);
         return (
             <div className="Game">
+                <p className="Game__best-score">Best score: {bestScore}</p>
                 <button 
-                    className="Game__reset-btn"
+                    className={`Game__reset-btn ${isGameOver && "Game__reset-btn--active"}`}
                     onClick={this.reset}
                 >
                     Reset
@@ -105,16 +130,16 @@ class Game extends Component {
                                 key={i}
                                 indx={i} 
                                 val={d}
-                                isLocked={locked[i] ? true : false}
+                                isLocked={(locked[i] || isGameOver) ? true : false}
                                 isRolling={isRolling}
                                 rotation={`${rotation[i]}deg`}
-                                lock={this.lock}
+                                lock={!isGameOver ? this.lock : null}
                             />
                         ))}
                     </div>
                     <button 
                         className="Game__btn"
-                        disabled={isRolling || rollsRemaining < 1}
+                        disabled={isGameOver || isRolling || rollsRemaining < 1}
                         onClick={this.roll}
                     >
                         {this.getBtnTxt()}
@@ -134,7 +159,7 @@ class Game extends Component {
                         </ul>
                     </article>
                     <article className="Game__scores-box">
-                        <h2 className="Game__scores-header">Total: {this.sumScores()}</h2>
+                        <h2 className="Game__scores-header">Total: {score}</h2>
                     </article>
                 </main>
             </div>
