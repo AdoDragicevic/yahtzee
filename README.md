@@ -3,14 +3,15 @@
 ## Play a game of Yahtzee! :game_die:
 
 ### Visit it on Nelify
-https://hardcore-cray-3db01e.netlify.app/
+https://hopeful-cori-6579b5.netlify.app/
 
 ### Functionalities
 * Roll dices up to three times per round
-* Freeze the dices you want to keep, reroll the rest
+* Freeze dices you want to keep, reroll the rest
 * Pick how you assing the dice values to your score card
 * Get the highest score
 * Reset game
+* Best score is saved to local storage
 * Responsive design
 
 ### Using
