@@ -29,7 +29,7 @@ class Rule {
 
     sumFrequency = (location, freq) => {
         for (let key in location) {
-            if (location[key] === freq) return parseInt(key) * location[key];
+            if (location[key] >= freq) return parseInt(key) * freq;
         }
         return null;
     };
