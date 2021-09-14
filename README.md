@@ -2,8 +2,8 @@
 
 ## Play a game of Yahtzee! :game_die:
 
-### Visit it on Nelify
-https://gallant-sammet-332dc6.netlify.app/
+### Visit it on Netlify
+https://yahtzee-ado.netlify.app/
 
 ### Functionalities
 * Roll dices up to three times per round
